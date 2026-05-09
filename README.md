@@ -1,6 +1,3 @@
-# iBarber — Plataforma SaaS para Barbearias
-iBarber é uma plataforma completa de gestão e agendamento online para barbearias, desenvolvida como SaaS multitenant. Cada barbearia tem seu próprio site personalizado, painel de gestão e sistema de agendamento — tudo em um único produto.
-
 # Visão geral
 O dono de uma barbearia acessa a plataforma, cria sua conta, personaliza o site com suas cores, logo e informações, e em minutos tem um link exclusivo (ibarber.app.br/sua-barbearia) pronto para receber clientes.
 
@@ -29,3 +26,40 @@ Multitenant — cada barbearia completamente isolada
 Trial gratuito + planos de assinatura via Mercado Pago
 Rate limiting e proteção contra ataques de força bruta
 Login social com Google OAuth 2.0
+
+# Tecnologias
+Camada	Tecnologia
+Backend	Python, Flask, SQLAlchemy
+Banco de dados	MySQL (produção), SQLite (desenvolvimento)
+Frontend	HTML, CSS, JavaScript puro
+Autenticação	Flask Sessions, Google OAuth 2.0
+Pagamentos	Mercado Pago Checkout Pro
+E-mail	Gmail SMTP
+Agendador	APScheduler
+Infraestrutura	VPS Linux, Gunicorn, systemd, Cloudflare
+Versionamento	Git + GitHub
+
+# Arquitetura
+Cliente
+└── Cloudflare (DNS + CDN)
+└── VPS Linux
+├── Gunicorn (WSGI)
+│     └── Flask (app principal)
+│           ├── Rotas multitenant (por slug)
+│           ├── Google OAuth 2.0
+│           └── Mercado Pago API
+├── MySQL (banco de dados)
+└── APScheduler (background)
+├── Lembretes de agendamento
+├── Verificação de assinaturas
+└── Limpeza de contas guest
+
+
+# Como funciona o multitenant
+Cada tenant (barbearia) tem:
+
+Slug único: ibarber.app.br/nome-da-barbearia
+Dados completamente isolados no banco
+Tema visual independente (cores, fontes, geometria, imagens)
+Funcionários, serviços e horários próprios
+
